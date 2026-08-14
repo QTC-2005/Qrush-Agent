@@ -12,8 +12,12 @@ Qrush Agent 是对 DeepSeek 官方 Agent Harness 的品牌化定制：保持上�
 |---|---|
 | `apps/web/index.html` | 页面标题 `DeepSeek Harness` → `Qrush Agent` |
 | `apps/web/public/manifest.webmanifest` | PWA 名称 → `Qrush Agent` / `Qrush` |
+| `apps/web/public/favicon.svg` | 图标 → Qrush 渐变圆角标 |
 | `apps/cli/config/agent-presets/qrush-standard/` | **新增**默认预设：Qrush 品牌 persona + 缓存调优 |
 | `packages/bundle/web-app/cordis.patch.yml` | Web 默认预设 `standard` → `qrush-standard` |
+| `packages/context/qrush-cache-anchor/` | **新增**锚点诊断：`{system,tools}` 前缀 sha256 指纹 + 重置计数（服务 + durable 投影） |
+| `packages/client/ui-cache-panel/` | **新增**缓存面板：输入框 dock 显示命中率 + 锚点重置次数 |
+| `desktop/` | **新增**Electron 桌面壳：spawn dsh web + 原生窗口（独立包，不在 workspace 内） |
 
 `qrush-standard` 预设相对上游 `standard` 的两处 delta：
 
@@ -78,8 +82,9 @@ git merge upstream/main   # 或 rebase
 
 ## 后续路线（规划）
 
-- **Phase 1**：缓存命中仪表盘 client 插件 + 锚点指纹（`sha256(tools+system)`）诊断；
-- **Phase 2**：桌面端 —— 按上游预留的 Electron + IPC fetch carrier 路线，新增 `apps/qrush-desktop`，复用全部 `dsh-client-*` 浏览器插件；
-- **Phase 3**：onboarding 文案/图标品牌化、会话管理增强、成本报告、发布渠道。
+- ✅ **Phase 0**：品牌化 fork + DeepSeek 优先预设；
+- ✅ **Phase 1**：缓存命中优化 —— 锚点指纹诊断（`qrush-cache-anchor`）+ 缓存面板（`ui-cache-panel`）；
+- ✅ **Phase 2（wrapper）**：桌面端 Electron 壳（`desktop/`，spawn dsh web + 原生窗口）；更深层的 Electron + IPC fetch carrier（`file://` + 进程内 host）留待需要无服务器单进程时再做；
+- ⏳ **Phase 3**：onboarding 文案品牌化、成本节省显示、会话管理增强、签名安装包/发布渠道。
 
 调研报告见仓库外 `../Qrush-Agent-调研报告.md` 与 `../research/`。

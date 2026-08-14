@@ -1,0 +1,16 @@
+{
+  "name": "qrush-desktop",
+  "version": "0.1.0",
+  "description": "Qrush Agent desktop client: an Electron shell that runs the dsh web runtime and opens a native window",
+  "private": true,
+  "type": "module",
+  "main": "src/main.mjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
