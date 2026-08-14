@@ -5,9 +5,10 @@
  * DeepSeek's automatic prefix cache anchors on a byte-identical prefix rendered
  * from tools + system + messages. The stable part a session can control is
  * `{ system, tools }`; when that prefix changes, the provider cache misses the
- * following request. This service fingerprints that prefix per request and
- * counts the changes, so a consumer (dashboard, telemetry) can show exactly
- * when and how often the cache anchor reset.
+ * following request. This package fingerprints that prefix and counts changes,
+ * twice: a live {@link CacheAnchor} service (per-request observation) and a
+ * durable `cacheAnchor` session projection (folded from `request/header`), so
+ * the count survives a process restart and reaches the browser.
  *
  * @module @deepseek-ai/dsh-qrush-cache-anchor
  */
@@ -15,6 +16,8 @@
 import { Context, Service } from '@deepseek-ai/cordis'
 import { createHash } from 'node:crypto'
 import type { GenerateOptions, ToolSchema } from '@deepseek-ai/dsh-llm'
+import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
+import { z } from 'zod'
 import type { CacheAnchorSnapshot } from './types.ts'
 
 export type * from './types.ts'
@@ -42,9 +45,48 @@ export function anchorFingerprint(
     .digest('hex')
 }
 
+/** Internal projection state: the newest fingerprint plus reset accounting. */
+interface CacheAnchorState {
+  fingerprint: string | null
+  resets: number
+  lastChangedSeq: number | null
+}
+
+const cacheAnchorSchema = z.object({
+  fingerprint: z.string().nullable(),
+  resets: z.number().int().nonnegative(),
+  lastChangedSeq: z.number().int().nonnegative().nullable(),
+}).strict()
+
+/**
+ * Durable `cacheAnchor` projection: folds `request/header` events, which carry
+ * the assembled `{ system, tools }` prefix, into a fingerprint and a reset
+ * count. `request/header` is appended exactly when the header changes, so one
+ * fold per header change matches the live service's observation exactly.
+ */
+export const cacheAnchorProjectionDefinition: ProjectionDefinition<'cacheAnchor', CacheAnchorState> = {
+  key: 'cacheAnchor',
+  schema: cacheAnchorSchema,
+  init: () => ({ fingerprint: null, resets: 0, lastChangedSeq: null }),
+  apply: (state, event) => {
+    if (event.type !== 'request/header') return state
+    const fingerprint = anchorFingerprint(event.data.header.system, event.data.header.tools)
+    if (state.fingerprint === null) return { fingerprint, resets: 0, lastChangedSeq: null }
+    if (state.fingerprint === fingerprint) return state
+    return { fingerprint, resets: state.resets + 1, lastChangedSeq: event.seq }
+  },
+  view: state => ({
+    fingerprint: state.fingerprint,
+    resets: state.resets,
+    lastChangedSeq: state.lastChangedSeq,
+  }),
+  stateVersion: 1,
+}
+
 /**
  * Per-session prefix observation service. Tracks the newest fingerprint and how
- * many times it changed, keyed by session id.
+ * many times it changed, keyed by session id, and registers the durable
+ * `cacheAnchor` projection when a projection registry is present.
  */
 export class CacheAnchor extends Service {
   private readonly anchors = new Map<string, CacheAnchorSnapshot>()
@@ -58,6 +100,12 @@ export class CacheAnchor extends Service {
       this.observe(options)
       return next()
     }, { global: true })
+
+    // Projection registration is an optional child: compositions without the
+    // generic registry keep the live service's standalone read shape.
+    ctx.inject(['sessionProjections'], (projectionCtx) => {
+      projectionCtx.sessionProjections.register(cacheAnchorProjectionDefinition)
+    })
   }
 
   /**
