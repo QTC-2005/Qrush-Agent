@@ -1,0 +1,13 @@
+.dock {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dsw-space-2);
+  min-width: 0;
+}
+
+.stat {
+  font-size: var(--dsw-font-size-xs);
+  line-height: var(--dsw-line-height-tight);
+  color: var(--dsw-alias-text-muted);
+  white-space: nowrap;
+}
