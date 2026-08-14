@@ -1,0 +1,3 @@
+name: Qrush 模式
+description: Qrush Agent 默认预设：DeepSeek 优先的完整编码 Agent，缓存命中调优（更早压缩、保留更多近期上下文），支持文件编辑、Shell、文件与网页检索、Skills、计划、目标、子代理与工作流。
+order: 0
