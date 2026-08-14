@@ -281,6 +281,11 @@
     - id: token-meter
       name: '@deepseek-ai/dsh-token-meter'
 
+    # Qrush cache-anchor diagnostic: sha256 fingerprint of the request
+    # system+tools prefix and a per-session reset count (read-only observer).
+    - id: qrush-cache-anchor
+      name: '@deepseek-ai/dsh-qrush-cache-anchor'
+
     - id: compaction-basic
       name: '@deepseek-ai/dsh-compaction-basic'
 
