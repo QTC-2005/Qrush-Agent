@@ -286,6 +286,11 @@
     - id: qrush-cache-anchor
       name: '@deepseek-ai/dsh-qrush-cache-anchor'
 
+    # Qrush scene router: classify user messages into usage scenarios and
+    # inject a suggested-skills reminder (one-shot per session-scenario).
+    - id: qrush-scene-router
+      name: '@deepseek-ai/dsh-qrush-scene-router'
+
     - id: compaction-basic
       name: '@deepseek-ai/dsh-compaction-basic'
 
