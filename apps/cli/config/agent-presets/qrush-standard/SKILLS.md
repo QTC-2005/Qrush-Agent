@@ -46,7 +46,7 @@ metadata:
    - `skill(<name>)` 工具能加载正文。
 5. **记录来源**：更新本文档「来源与候选」表 + `metadata.source/license`。
 
-## 已预装清单（25 个，2026-08，按使用场景分类）
+## 已预装清单（45 个，2026-08，按使用场景分类）
 
 > 全部来自 MIT / Apache-2.0 许可仓库，可自由再分发；技能为「一次性加载的指令」，正文不进常驻前缀，仅 `name`+`description` 进技能目录。
 
@@ -105,8 +105,39 @@ metadata:
 | `prompt-injection-review` | 面向 agent 项目的提示注入面审查（AGENTS.md、技能目录、工具描述、MCP/网页来源） |
 | `threat-model` | 新功能/新系统的轻量威胁建模（对象→信任边界→资产→STRIDE 威胁表） |
 
+### 场景 7：机器学习 / 深度学习 / 数据科学（MIT，来自 [agent-ml-skills](https://github.com/param087/agent-ml-skills)）
+
+| 技能 | 用途 |
+|---|---|
+| `exploratory-data-analysis` | 探索性数据分析（EDA 决策流程） |
+| `data-cleaning` | 数据清洗决策框架 |
+| `pandas-patterns` | pandas 常用模式与陷阱 |
+| `feature-engineering` | 特征工程决策 |
+| `sklearn-pipelines` | scikit-learn 管线构建 |
+| `pytorch-training-loop` | PyTorch 训练循环最佳实践 |
+| `hyperparameter-tuning` | 超参调优策略 |
+| `model-evaluation` | 模型评估指标与协议 |
+| `ml-debugging` | ML 调试（欠拟合/过拟合/数据问题定位） |
+| `imbalanced-data` | 类别不平衡处理 |
+| `reproducible-ml` | 可复现 ML 实验 |
+| `experiment-tracking` | 实验追踪（指标/配置/产物） |
+| `llm-finetuning` | LLM 微调（数据/训练/评估） |
+| `rag-pipeline` | RAG 管线构建 |
+| `model-serving` | 模型服务化部署 |
+
+### 场景 8：图像处理 / 计算机视觉（MIT，来自 [image-processing-skills](https://github.com/aeren23/image-processing-skills)）
+
+| 技能 | 用途 |
+|---|---|
+| `image-fundamentals` | 颜色空间/格式/坐标陷阱（CV 基础） |
+| `preprocessing-decisions` | 预处理决策：滤波选择树、噪声识别 |
+| `thresholding-strategy` | 阈值策略：全局 vs Otsu vs 自适应决策矩阵 |
+| `morphology-toolkit` | 形态学工具：开/闭运算、结构元素选择 |
+| `contour-analysis` | 轮廓分析：形状度量、医学分类比例 |
+
 **未预装 / 待确认**
 - `anthropics/skills`（docx/pdf/pptx/xlsx 文档处理 + mcp-builder）：价值高，**许可证未核实**，确认后再装（覆盖"文档/表格"场景的缺口）；
+- **网页模板/设计类**：暂无干净 MIT 源——`skill-site-generator` 无 LICENSE、anthropics webapp-testing 许可证未核实；`anti-slop-website-prompts`（MIT）是 prompt 集非 SKILL.md 格式。需要时再评估；
 - 中文汉化版（superpowers-zh 等）：正文目前为英文，需要时评估；
 - 现成管理工具（dsh-skillport、dsh-skills-manage）：生态很新、审计不足，暂不引入。
 
