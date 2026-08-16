@@ -18,6 +18,7 @@
 
 import { app, BrowserWindow, dialog } from 'electron'
 import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -31,17 +32,40 @@ const PORT = Number.parseInt(process.env.QRUSH_PORT ?? '3090', 10)
 const HOST = process.env.QRUSH_HOST ?? '127.0.0.1'
 const URL = `http://${HOST}:${PORT}`
 
+/**
+ * Locate a real Node on PATH. Electron's embedded Node is v20 — below the dsh
+ * runtime's ^22.19 engine floor — and fails to resolve the @deepseek-ai
+ * workspace packages, so we must spawn the system Node, not process.execPath.
+ */
+function findSystemNode() {
+  const exe = process.platform === 'win32' ? 'node.exe' : 'node'
+  const dirs = (process.env.Path ?? process.env.PATH ?? '').split(path.delimiter)
+  for (const dir of dirs) {
+    if (dir === '') continue
+    const candidate = path.join(dir, exe)
+    try {
+      if (existsSync(candidate)) return candidate
+    } catch {
+      // keep scanning
+    }
+  }
+  return process.execPath
+}
+
+const nodeExe = findSystemNode()
+// Only when PATH has no Node at all do we fall back to Electron-as-node.
+const spawnEnv = nodeExe === process.execPath
+  ? { ...process.env, ELECTRON_RUN_AS_NODE: '1' }
+  : { ...process.env }
+
 /** Spawn the dsh web runtime; the child is reaped on every exit path. */
-const child = spawn(process.execPath, [dshBin, 'web', '--host', HOST, '--port', String(PORT)], {
+const child = spawn(nodeExe, [dshBin, 'web', '--host', HOST, '--port', String(PORT)], {
   stdio: 'inherit',
-  // ELECTRON_RUN_AS_NODE makes the Electron binary behave as plain Node, so
-  // the dsh CLI runs as a Node child — without it, Electron would treat
-  // bin.js as a nested app entry and nothing would serve.
-  env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' },
+  env: spawnEnv,
 })
 
 /** Poll until the runtime answers, so the window never paints a dead URL. */
-async function waitForServer(timeoutMs = 30_000) {
+async function waitForServer(timeoutMs = 60_000) {
   const deadline = Date.now() + timeoutMs
   while (Date.now() < deadline) {
     try {
