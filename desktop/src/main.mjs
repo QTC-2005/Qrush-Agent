@@ -33,7 +33,10 @@ const URL = `http://${HOST}:${PORT}`
 /** Spawn the dsh web runtime; the child is reaped on every exit path. */
 const child = spawn(process.execPath, [dshBin, 'web', '--host', HOST, '--port', String(PORT)], {
   stdio: 'inherit',
-  env: { ...process.env },
+  // ELECTRON_RUN_AS_NODE makes the Electron binary behave as plain Node, so
+  // the dsh CLI runs as a Node child — without it, Electron would treat
+  // bin.js as a nested app entry and nothing would serve.
+  env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' },
 })
 
 /** Poll until the runtime answers, so the window never paints a dead URL. */
