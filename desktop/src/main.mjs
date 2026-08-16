@@ -22,8 +22,9 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
-// desktop/ sits beside apps/; the built dsh CLI is the runtime we wrap.
-const repoRoot = path.resolve(dirname, '..')
+// main.mjs lives at desktop/src; two hops up is the repo root, where apps/
+// sits. The built dsh CLI is the runtime we wrap.
+const repoRoot = path.resolve(dirname, '..', '..')
 const dshBin = path.join(repoRoot, 'apps', 'cli', 'lib', 'bin.js')
 
 const PORT = Number.parseInt(process.env.QRUSH_PORT ?? '3090', 10)
