@@ -77,8 +77,16 @@
 
 # The skill REGISTRY lives in the host composition and is layered per scope:
 # these rows register into THIS preset's layer of it, so they need no realm.
+# `customSkillDirs` adds the preset's own `skills/` bundle (the Qrush skills
+# library) ahead of the project/user roots, so every session on this preset
+# sees the same preinstalled catalog. `baseUrl` is the preset's own directory,
+# so the path resolves wherever the preset is installed. See SKILLS.md at the
+# preset root for how to add or update a skill.
 - id: skill-filesystem
   name: '@deepseek-ai/dsh-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
 
 - id: tool-skill
   name: '@deepseek-ai/dsh-tool-skill'
