@@ -1,6 +1,6 @@
-﻿---
+---
 name: model-serving
-description: Use when deploying a trained model behind an API. Covers FastAPI inference services, loading artifacts safely, request validation, batching, ONNX/quantization for speed, health checks, and monitoring.
+description: 模型服务化部署：接口设计、推理优化与监控
 ---
 
 # Model Serving

@@ -1,6 +1,6 @@
-﻿---
+---
 name: pytorch-training-loop
-description: Use when writing or reviewing a PyTorch training loop. Covers correct train/eval modes, gradient handling, mixed precision, checkpointing, reproducibility, and device management.
+description: PyTorch 训练循环最佳实践：数据加载、前向/反向、优化器、日志与保存
 ---
 
 # PyTorch Training Loop

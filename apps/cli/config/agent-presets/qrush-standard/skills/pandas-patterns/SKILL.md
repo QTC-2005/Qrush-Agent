@@ -1,6 +1,6 @@
-﻿---
+---
 name: pandas-patterns
-description: Use when writing or reviewing pandas code. Covers idiomatic, vectorized, memory-efficient patterns; avoiding SettingWithCopyWarning, chained indexing, and slow apply loops.
+description: pandas 常用模式与陷阱：高效数据处理写法
 ---
 
 # Pandas Patterns

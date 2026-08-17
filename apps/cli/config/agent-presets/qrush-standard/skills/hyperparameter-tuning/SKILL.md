@@ -1,6 +1,6 @@
-﻿---
+---
 name: hyperparameter-tuning
-description: Use when optimizing model hyperparameters. Covers search strategy (random vs Bayesian/Optuna), leakage-safe tuning inside CV, search-space design, early stopping, and budget management.
+description: 超参数调优策略：搜索空间、方法与评估协议
 ---
 
 # Hyperparameter Tuning

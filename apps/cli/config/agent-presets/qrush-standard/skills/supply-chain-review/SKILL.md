@@ -1,6 +1,6 @@
-﻿---
+---
 name: supply-chain-review
-description: 'PR/新依赖快速供应链评审：危险 install/postinstall 脚本检查、typosquat 相似名判断、可复现构建验证，每项附误报判据与通过/要求修改/阻断三档决策阈值。评审引入新依赖的 PR 或需快速给出新增依赖风险结论时用；与新增依赖无关的普通代码评审不用。'
+description: PR/新依赖快速供应链评审：危险 install/postinstall 脚本、typosquat 检查
 whenToUse: '评审含新依赖（package.json/锁文件变更）的 PR、审查某包的 install 脚本行为、判断疑似 typosquat 包或验证构建可复现性时使用；纯业务代码、与新增依赖无关的 PR 评审不触发本技能。'
 metadata:
   pack: dsh-skill-pack-security

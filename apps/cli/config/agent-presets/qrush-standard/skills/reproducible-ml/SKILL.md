@@ -1,6 +1,6 @@
-﻿---
+---
 name: reproducible-ml
-description: Use when an ML result must be reproducible — fixing seeds, pinning environments, versioning data, and structuring projects so runs can be exactly recreated. Covers determinism gotchas across NumPy, PyTorch, and CUDA.
+description: 可复现 ML 实验：固定种子、记录配置/数据版本/产物
 ---
 
 # Reproducible ML

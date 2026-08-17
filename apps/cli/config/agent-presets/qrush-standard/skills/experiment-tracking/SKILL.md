@@ -1,6 +1,6 @@
-﻿---
+---
 name: experiment-tracking
-description: Use when running ML experiments that need to be compared, reproduced, or shared. Covers MLflow/Weights & Biases logging, what to track, run organization, and model registry basics.
+description: 实验追踪：用 MLflow/W&B 记录指标、配置与产物，做实验对比
 ---
 
 # Experiment Tracking

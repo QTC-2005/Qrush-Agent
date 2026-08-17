@@ -1,6 +1,6 @@
-﻿---
+---
 name: rag-pipeline
-description: Use when building retrieval-augmented generation. Covers chunking strategy, embedding choice, vector stores, hybrid + reranking retrieval, prompt assembly, and evaluating retrieval and answer quality.
+description: RAG 管线构建：检索、生成与评估（recall、faithfulness）
 ---
 
 # RAG Pipeline

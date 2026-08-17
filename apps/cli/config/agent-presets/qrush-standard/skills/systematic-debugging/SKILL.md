@@ -1,6 +1,6 @@
-﻿---
+---
 name: systematic-debugging
-description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+description: 遇到 bug、测试失败或异常行为时，先系统化定位根因再修复，不要乱猜
 ---
 
 # Systematic Debugging

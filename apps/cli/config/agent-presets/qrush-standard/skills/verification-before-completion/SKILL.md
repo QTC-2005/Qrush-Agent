@@ -1,6 +1,6 @@
-﻿---
+---
 name: verification-before-completion
-description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+description: 声称工作完成、已修复或测试通过前，先实际运行验证命令并用证据说话
 ---
 
 # Verification Before Completion

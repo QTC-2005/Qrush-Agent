@@ -1,6 +1,6 @@
-﻿---
+---
 name: sklearn-pipelines
-description: Use when building scikit-learn models that must not leak preprocessing. Covers Pipeline, ColumnTransformer, custom transformers, and combining preprocessing with cross-validation correctly.
+description: scikit-learn 管线构建：清洗-变换-建模-评估串联
 ---
 
 # scikit-learn Pipelines

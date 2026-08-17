@@ -1,6 +1,6 @@
-﻿---
+---
 name: model-evaluation
-description: Use when choosing metrics, validating models, or interpreting results. Covers metric selection by problem type, cross-validation strategy, calibration, confusion-matrix analysis, and avoiding misleading scores.
+description: 模型评估：指标选择、切分协议与结果解读
 ---
 
 # Model Evaluation

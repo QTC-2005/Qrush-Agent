@@ -1,6 +1,6 @@
-﻿---
+---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: 任何创意性工作前使用：功能设计、方案权衡时先发散再收敛
 ---
 
 # Brainstorming Ideas Into Designs

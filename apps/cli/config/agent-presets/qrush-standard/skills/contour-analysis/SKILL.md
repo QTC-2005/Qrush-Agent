@@ -1,6 +1,6 @@
-﻿---
+---
 name: contour-analysis
-description: Shape classification through mathematical ratios, bounding box extraction, centroid computation, and medical morphometric analysis
+description: 图像轮廓分析：形状度量、特征提取与分类
 version: 1.0.0
 tags: [opencv, contours, shape-analysis, features, medical-imaging, morphometry]
 ---

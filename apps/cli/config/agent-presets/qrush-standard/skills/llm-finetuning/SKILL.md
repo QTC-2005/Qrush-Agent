@@ -1,6 +1,6 @@
-﻿---
+---
 name: llm-finetuning
-description: Use when fine-tuning a large language model. Covers choosing full vs LoRA/QLoRA, dataset formatting, the transformers/PEFT/TRL stack, key hyperparameters, and evaluating fine-tunes without overfitting.
+description: LLM 微调：数据准备、SFT 训练、评估与部署全流程
 ---
 
 # LLM Fine-Tuning

@@ -1,6 +1,6 @@
-﻿---
+---
 name: imbalanced-data
-description: Use when the target is rare (fraud, churn, disease, anomalies). Covers correct metrics, resampling (SMOTE/undersampling), class weights, threshold tuning, and avoiding the accuracy trap and resampling leakage.
+description: 类别不平衡处理：重采样、加权损失、评估指标选择
 ---
 
 # Imbalanced Data

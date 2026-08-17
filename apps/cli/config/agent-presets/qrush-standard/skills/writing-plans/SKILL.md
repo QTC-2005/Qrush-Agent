@@ -1,6 +1,6 @@
-﻿---
+---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: 有规格或需求、任务多步骤时，先写一份可执行的分阶段计划
 ---
 
 # Writing Plans

@@ -1,6 +1,6 @@
-﻿---
+---
 name: preprocessing-decisions
-description: Filter selection decision tree, noise identification, edge detection priority, and kernel parameter rules
+description: 图像预处理决策：滤波选择树、噪声识别与增强策略
 version: 1.0.0
 tags: [opencv, filtering, blur, edge-detection, noise, convolution]
 ---

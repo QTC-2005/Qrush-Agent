@@ -1,6 +1,6 @@
-﻿---
+---
 name: thresholding-strategy
-description: Decision matrix for Global vs Otsu vs Adaptive thresholding, CLAHE parameter tuning, and histogram-based preprocessing
+description: 图像阈值策略：全局 vs Otsu vs 自适应的选择矩阵
 version: 1.0.0
 tags: [opencv, thresholding, histogram, CLAHE, segmentation, binary]
 ---

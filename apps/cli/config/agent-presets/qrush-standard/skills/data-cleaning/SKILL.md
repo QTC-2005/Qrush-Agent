@@ -1,6 +1,6 @@
-﻿---
+---
 name: data-cleaning
-description: Use when preparing raw data for modeling — handling missing values, duplicates, inconsistent types, outliers, and bad categorical values. Emphasizes fitting all imputation on train-only to avoid leakage.
+description: 数据清洗决策框架：处理缺失、重复、异常值与类型问题
 ---
 
 # Data Cleaning

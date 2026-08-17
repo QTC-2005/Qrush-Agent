@@ -1,6 +1,6 @@
-﻿---
+---
 name: image-fundamentals
-description: Color space decisions, format selection, coordinate conventions, and bit depth trade-offs for image processing
+description: 图像处理基础：颜色空间、格式、坐标系统与常见陷阱
 version: 1.0.0
 tags: [opencv, color-space, image-format, coordinates, fundamentals]
 ---

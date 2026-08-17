@@ -1,6 +1,6 @@
-﻿---
+---
 name: feature-engineering
-description: Use when creating, encoding, scaling, or selecting features for ML models. Covers categorical encoding, numeric transforms, datetime/text/aggregation features, and leakage-safe target encoding.
+description: 特征工程决策：构造、选择与转换特征
 ---
 
 # Feature Engineering

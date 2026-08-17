@@ -1,6 +1,6 @@
-﻿---
+---
 name: morphology-toolkit
-description: Opening vs Closing decision guide, structuring element selection, Top-Hat/Bottom-Hat contrast filters, and grayscale morphology
+description: 图像形态学工具：开/闭运算、结构元素选择与用途
 version: 1.0.0
 tags: [opencv, morphology, erosion, dilation, opening, closing, binary]
 ---

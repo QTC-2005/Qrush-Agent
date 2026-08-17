@@ -1,6 +1,6 @@
-﻿---
+---
 name: ml-debugging
-description: Use when a model won't learn, loss is NaN, metrics look too good/bad, or training is unstable. Provides a systematic decision tree for diagnosing data, optimization, and generalization failures.
+description: ML 调试：定位欠拟合/过拟合、数据问题、梯度与损失异常
 ---
 
 # ML Debugging

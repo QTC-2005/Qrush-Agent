@@ -1,6 +1,6 @@
-﻿---
+---
 name: exploratory-data-analysis
-description: Use when starting on a new dataset, before modeling, or when asked to "explore", "profile", "understand", or "summarize" data. Covers structured EDA, distributions, correlations, target leakage checks, and visualization.
+description: 探索性数据分析（EDA）：分布、缺失、异常值检查与可视化决策
 ---
 
 # Exploratory Data Analysis (EDA)

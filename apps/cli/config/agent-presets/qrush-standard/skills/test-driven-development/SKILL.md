@@ -1,6 +1,6 @@
-﻿---
+---
 name: test-driven-development
-description: Use when implementing any feature or bugfix, before writing implementation code
+description: 实现任何功能或修复前，先用 TDD 写失败测试，再让实现通过
 ---
 
 # Test-Driven Development (TDD)

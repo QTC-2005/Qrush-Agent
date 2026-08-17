@@ -1,6 +1,6 @@
-﻿---
+---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work
+description: 实现完成、测试通过后，规范收尾开发分支（整理提交、合并）
 ---
 
 # Finishing a Development Branch
