@@ -1,4 +1,4 @@
-# One-click mobile access for Qrush: installs the dsh-pocket plugin (GPL-2.0,
+﻿# One-click mobile access for Qrush: installs the dsh-pocket plugin (GPL-2.0,
 # third-party) into the active web profile, giving a phone on the same LAN a
 # QR code to open Qrush, plus an optional cloudflared public tunnel.
 #
