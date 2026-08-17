@@ -21,6 +21,18 @@
       "path": "../../core/system-prompt"
     },
     {
+      "path": "../../core/tools"
+    },
+    {
+      "path": "../../core/scope"
+    },
+    {
+      "path": "../../llm/llm"
+    },
+    {
+      "path": "../../interaction/user-approval"
+    },
+    {
       "path": "../../runtime-diagnostics/invariants"
     }
   ]

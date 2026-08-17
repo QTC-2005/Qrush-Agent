@@ -37,12 +37,17 @@ import type {} from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-system-prompt'
 import { createEpochPromotion } from './epoch.ts'
 import type { AnchorEventLike, AnchorSessionLike, EpochPromotion } from './epoch.ts'
+import { registerDevToolSearch } from './dev-tool-search.ts'
 
 /** Cordis plugin name used by loader diagnostics. */
 export const name = 'qrush-anchor'
 
-/** Deliberately NO inject list: the listeners only touch services at event time. */
-export const inject: readonly string[] = []
+/**
+ * Services required at apply time. `tools` lets the plugin register the
+ * `dev_tool_search` discovery tool; the listeners themselves only touch
+ * services at event time.
+ */
+export const inject = ['tools']
 
 /** Durable session event types that count as a promotion signal per mode. */
 const PROMOTE_EVENTS: Record<'tool-call' | 'assistant-message' | 'either', readonly string[]> = {
@@ -59,6 +64,7 @@ const ALLOWED_KEYS = new Set([
   'allowKinds',
   'bootstrapTools',
   'compactionTools',
+  'heavyTools',
 ])
 
 /**
@@ -78,6 +84,11 @@ export interface Config {
   bootstrapTools?: readonly string[]
   /** Extra tools exposed after a compaction, before re-promotion. Default core work set. */
   compactionTools?: readonly string[]
+  /**
+   * Tools hidden in the promoted (resident) phase until explicitly unlocked
+   * via `dev_tool_search`. Defaults to the Qrush heavy-tool set.
+   */
+  heavyTools?: readonly string[]
 }
 
 /** Resolved runtime switches. */
@@ -88,6 +99,7 @@ export interface ResolvedConfig {
   allowKinds: ReadonlySet<string>
   bootstrapTools: readonly string[]
   compactionTools: readonly string[]
+  heavyTools: ReadonlySet<string>
 }
 
 /** The default first-request catalog: Qrush's cross-platform core filesystem set. */
@@ -98,12 +110,33 @@ export const DEFAULT_COMPACTION_TOOLS: readonly string[] = [
   'read', 'write', 'edit', 'glob', 'grep', 'todo_write', 'ask_user_question',
 ]
 
+/**
+ * The default resident-phase hidden set: heavy tools that are one
+ * `dev_tool_search` call away. Everything else (filesystem core, skill,
+ * task controls, and any third-party plugin tool such as memoir_record)
+ * stays visible after promotion — the hidden set excludes ONLY these names,
+ * so an external plugin's tools are never accidentally stripped.
+ */
+export const DEFAULT_HEAVY_TOOLS: readonly string[] = [
+  'web_search', 'subagent', 'subagent_fork', 'subagent_codex', 'subagent_claude_code',
+  'workflow', 'ralph', 'create_goal', 'get_goal', 'update_goal', 'read_image',
+  'job_list', 'job_output', 'job_kill', 'interrupt_agent', 'send_message', 'list_agents',
+]
+
 /** Message kinds allowed through the pre-step gate beyond the claimed batch. */
 const DEFAULT_ALLOW_KINDS: readonly string[] = ['skill-invocation']
 
 function stringList(value: unknown, field: string): string[] {
   if (!Array.isArray(value) || value.length === 0 || value.some(item => typeof item !== 'string' || item.length === 0)) {
     throw new TypeError(`${name}: ${field} must be a non-empty array of non-empty strings`)
+  }
+  return [...new Set(value)]
+}
+
+function stringListOrEmpty(value: unknown, field: string): string[] {
+  if (value === undefined) return []
+  if (!Array.isArray(value) || value.some(item => typeof item !== 'string' || item.length === 0)) {
+    throw new TypeError(`${name}: ${field} must be an array of non-empty strings`)
   }
   return [...new Set(value)]
 }
@@ -149,7 +182,34 @@ export function resolveConfig(config: Config | undefined): ResolvedConfig {
     compactionTools: source.compactionTools === undefined
       ? DEFAULT_COMPACTION_TOOLS
       : [...new Set(stringList(source.compactionTools, 'compactionTools'))],
+    heavyTools: new Set(source.heavyTools === undefined ? DEFAULT_HEAVY_TOOLS : stringListOrEmpty(source.heavyTools, 'heavyTools')),
   }
+}
+
+/**
+ * Tool names the model explicitly unlocked via `dev_tool_search` for one
+ * session. Derived from durable `tool/call` events so resume/reload keeps
+ * them. The event's `arguments` is the raw JSON string the model produced;
+ * parsed defensively, reading the `toolNames` array.
+ */
+export function unlockedFor(session: AnchorSessionLike | undefined): ReadonlySet<string> {
+  const unlocked = new Set<string>()
+  if (session === undefined || !Array.isArray(session.events)) return unlocked
+  for (const event of session.events) {
+    if (event.type !== 'tool/call') continue
+    const data = (event as AnchorEventLike & { data?: { name?: unknown; arguments?: unknown } }).data
+    if (data?.name !== 'dev_tool_search') continue
+    let args: unknown
+    try {
+      args = JSON.parse(typeof data.arguments === 'string' ? data.arguments : '')
+    } catch {
+      continue
+    }
+    if (args === null || typeof args !== 'object' || Array.isArray(args)) continue
+    const names = (args as { toolNames?: unknown }).toolNames
+    if (Array.isArray(names)) for (const name of names) if (typeof name === 'string' && name.length > 0) unlocked.add(name)
+  }
+  return unlocked
 }
 
 /**
@@ -201,18 +261,26 @@ export function apply(ctx: Context, config?: Config): void {
     }
   }
 
+  ctx.effect(() => registerDevToolSearch(ctx, value.heavyTools), 'qrush-anchor: dev_tool_search')
+
   ctx.on('session/event', (session: AnchorSessionLike, event: AnchorEventLike) => {
     promotion.observe(session, event)
   })
 
   // Tool catalog + runtime-context control: while unpromoted, narrow the
   // tools to the bootstrap set and blank the dynamic runtime-context
-  // contributions (the whole SystemPrompt.context() family).
+  // contributions (the whole SystemPrompt.context() family). After promotion,
+  // the catalog returns minus the heavy tools; explicitly unlocked names
+  // come back on the next request.
   ctx.on('system-prompt/assemble', async (_assembly, context, next) => {
     const assembled = await next()
     try {
       const { boundary, promoted } = promotion.status(context.agent)
-      if (promoted) return assembled
+      if (promoted) {
+        const unlocked = unlockedFor(context.agent?.session as AnchorSessionLike | undefined)
+        const kept = assembled.tools.filter(tool => !value.heavyTools.has(tool.name) || unlocked.has(tool.name))
+        return { ...assembled, tools: kept }
+      }
       const keep = new Set<string>(value.bootstrapTools)
       if (boundary >= 0) for (const toolName of value.compactionTools) keep.add(toolName)
       const filtered = keepTools(assembled, keep, true, warnOnce)

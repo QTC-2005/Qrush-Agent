@@ -13,7 +13,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-tool/client'
 import css from './SkillToolview.module.css'
 
 /** Dock entry props: the toolview owner share plus the locale seat. */
-export type SkillToolviewProps = PropsRuntime<'tool.call.toolview'> & PropsLocale<'skill'>
+export type SkillToolviewProps = PropsRuntime<'tool.call.toolview'> & PropsLocale<'skill-toolview'>
 
 /** Extract the `name` argument from the call's raw JSON args; null when malformed. */
 function skillNameFromArgs(argsRaw: string | null | undefined): string | null {

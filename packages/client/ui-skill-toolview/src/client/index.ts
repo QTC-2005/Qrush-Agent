@@ -17,12 +17,12 @@ export type { SkillToolviewKey } from './locales.ts'
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The skill toolview row's copy. */
-    skill: SkillToolviewKey
+    'skill-toolview': SkillToolviewKey
   }
 }
 
-/** Dictionary namespace owned by this plugin. */
-const NS = 'skill'
+/** Dictionary namespace owned by this plugin (distinct from ui-skill's 'skill'). */
+const NS = 'skill-toolview'
 
 /** Required services: slot registration and copy. */
 export const inject = ['slots', 'locale']
