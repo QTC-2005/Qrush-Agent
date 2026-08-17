@@ -187,6 +187,7 @@
     { "path": "./packages/context/agent-instructions" },
     { "path": "./packages/context/qrush-cache-anchor" },
     { "path": "./packages/context/qrush-scene-router" },
+    { "path": "./packages/context/qrush-anchor" },
     { "path": "./packages/core/agent-loop" },
     { "path": "./packages/llm/llm-retry" },
     { "path": "./packages/examples/agent-spine-demo" },

@@ -291,6 +291,12 @@
     - id: qrush-scene-router
       name: '@deepseek-ai/dsh-qrush-scene-router'
 
+    # Qrush anchor (adapted from dsh-anchored-standard): keep the FIRST model
+    # request on a minimal tool catalog with automatic injections suppressed,
+    # then promote to the full catalog after the first durable signal.
+    - id: qrush-anchor
+      name: '@deepseek-ai/dsh-qrush-anchor'
+
     - id: compaction-basic
       name: '@deepseek-ai/dsh-compaction-basic'
 

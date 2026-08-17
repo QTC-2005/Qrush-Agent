@@ -94,6 +94,7 @@
     "@deepseek-ai/dsh-token-meter": "workspace:^",
     "@deepseek-ai/dsh-qrush-cache-anchor": "workspace:^",
     "@deepseek-ai/dsh-qrush-scene-router": "workspace:^",
+    "@deepseek-ai/dsh-qrush-anchor": "workspace:^",
     "@deepseek-ai/dsh-tool-bash": "workspace:^",
     "@deepseek-ai/dsh-tool-fs": "workspace:^",
     "@deepseek-ai/dsh-tool-fs-search": "workspace:^",
