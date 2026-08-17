@@ -29,8 +29,12 @@ const repoRoot = path.resolve(dirname, '..', '..')
 const dshBin = path.join(repoRoot, 'apps', 'cli', 'lib', 'bin.js')
 
 const PORT = Number.parseInt(process.env.QRUSH_PORT ?? '3090', 10)
+// dsh deliberately refuses `--host 0.0.0.0` (remote code execution risk), so
+// mobile/LAN access must go through a reverse proxy or tunnel — the
+// `dsh-pocket` plugin provides that (cloudflared + QR). QRUSH_HOST overrides
+// the bind for other setups; the desktop window always loads loopback.
 const HOST = process.env.QRUSH_HOST ?? '127.0.0.1'
-const URL = `http://${HOST}:${PORT}`
+const WINDOW_URL = `http://127.0.0.1:${PORT}`
 
 /**
  * Locate a real Node on PATH. Electron's embedded Node is v20 — below the dsh
@@ -59,7 +63,8 @@ const spawnEnv = nodeExe === process.execPath
   : { ...process.env }
 
 /** Spawn the dsh web runtime; the child is reaped on every exit path. */
-const child = spawn(nodeExe, [dshBin, 'web', '--host', HOST, '--port', String(PORT)], {
+const spawnArgs = [dshBin, 'web', '--host', HOST, '--port', String(PORT)]
+const child = spawn(nodeExe, spawnArgs, {
   stdio: 'inherit',
   env: spawnEnv,
 })
@@ -69,14 +74,14 @@ async function waitForServer(timeoutMs = 60_000) {
   const deadline = Date.now() + timeoutMs
   while (Date.now() < deadline) {
     try {
-      const response = await fetch(URL)
+      const response = await fetch(WINDOW_URL)
       if (response.ok) return
     } catch {
       // Runtime not up yet.
     }
     await new Promise((resolve) => setTimeout(resolve, 250))
   }
-  throw new Error(`dsh web did not become ready at ${URL} within ${timeoutMs}ms`)
+  throw new Error(`dsh web did not become ready at ${WINDOW_URL} within ${timeoutMs}ms`)
 }
 
 async function createWindow() {
@@ -94,7 +99,7 @@ async function createWindow() {
       sandbox: true,
     },
   })
-  await win.loadURL(URL)
+  await win.loadURL(WINDOW_URL)
 }
 
 app.whenReady().then(() => {
